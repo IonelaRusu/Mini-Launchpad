@@ -66,14 +66,11 @@ static bool LED_buffer[NUM_LED_COLUMNS][NUM_LED_ROWS];
 static int32_t next_advance;
 static uint8_t led_index;
 
-
-
 static const uint8_t btncolumnpins[NUM_BTN_COLUMNS] = {PB0, PB1, PB2, PB3};
 static const uint8_t btnrowpins[NUM_BTN_ROWS]       = {PB4, PB5, PB6, PB7};
 static const uint8_t ledcolumnpins[NUM_LED_COLUMNS] = {PC0, PC1, PC2, PC3};
 static const uint8_t colorpins[NUM_LED_ROWS]        = {PC4, PC5, PC6, PC7};
 
-/* Aprinde led-ul PC0 la apasarea butonului PB2. */
 void setup(void) {
 	
 		/* Daca butonul este apasat. */
@@ -152,7 +149,6 @@ static void scan()
 	USART0_print(" in scan \n");
 	
 	
-	
 	PORTB &= ~(1 << btncolumnpins[current]);
 	PORTC &= ~(1 << ledcolumnpins[current]);
 	
@@ -172,20 +168,6 @@ static void scan()
 		PORTC |= (1<< PC7);
 			USART0_print(" **** \n");
 	}
-
-	
-/*	PORTB |= (1 << current);
-	
-	PORTB &= ~(1<< PB0);
-	PORTB &= ~(1<< PB1);
-	PORTB &= ~(1<< PB2);
-	PORTB &= ~(1<< PB3);
-		
-	current++;
-	if (current >= NUM_LED_COLUMNS)
-  {
-    current = 0;
-  }*/
 
 
 // pause a moment
@@ -335,26 +317,25 @@ static void scan()
 			  }
 			}
   
+ 
   
-  
-  
-	_delay_ms(5);//cat de rar sa se faca 
+	_delay_ms(5); 
 	PORTB |= (1<< btncolumnpins[current]);
 	PORTC |= (1<< ledcolumnpins[current]);
 
 	
 	
 		//digitalWrite(btncolumnpins[i], HIGH);
-		 PORTC &= ~(1<< PC4);
-		 PORTC &= ~(1<< PC5);
-		PORTC &= ~(1<< PC6);
-		PORTC &= ~(1<< PC7);
+	PORTC &= ~(1<< PC4);
+	PORTC &= ~(1<< PC5);
+	PORTC &= ~(1<< PC6);
+	PORTC &= ~(1<< PC7);
 		
-		current++;
-		if (current >= NUM_LED_COLUMNS)
-		  {
-			current = 0;
-		  }
+	current++;
+	if (current >= NUM_LED_COLUMNS)
+	{
+		current = 0;
+	}
 
 
 }
@@ -362,31 +343,24 @@ static void scan()
 int main(void) {
 	
 	USART0_init();
-	/*task1();*/
-	/*task2();*/
-	/*task3();*/
 	USART0_print("Starting Setup... \n");
 
-
-  // setup hardware
 	setup();
-	//next_scan = millis() + 1;
 
 	next_advance =  millis() + 1000;
 	led_index = 0;
 	
 	
-	 for(uint8_t i = 0; i < NUM_LED_COLUMNS; i++)
-	  {
+	for(uint8_t i = 0; i < NUM_LED_COLUMNS; i++)
+	{
 		for(uint8_t j = 0; j < NUM_LED_ROWS; j++)
 		{
 		  LED_buffer[i][j] = 0;
 		}
-	  }
+	}
 
 	USART0_print(" Setup...Complete\n");
 
-	
 	while (1){
 		 //if(millis() >= next_scan)
 		///  {
