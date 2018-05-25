@@ -71,12 +71,16 @@ static const uint8_t btnrowpins[NUM_BTN_ROWS]       = {PB0, PB1, PB2, PB3};
 static const uint8_t btncolumnpins[NUM_BTN_COLUMNS] = {PB4, PB5, PB6, PB7};
 static const uint8_t colorpins[NUM_LED_ROWS]        = {PA0, PA1, PA2, PA3};
 static const uint8_t ledcolumnpins[NUM_LED_COLUMNS]  = {PA4, PA5, PA6, PA7};
+static char matrice[NUM_BTN_COLUMNS][NUM_BTN_ROWS];
+static char matrice_s[NUM_BTN_COLUMNS][NUM_BTN_ROWS] = {'.',',','*','<','>','+','-','=','_','~','(',')','#','@','&','%'};
+static uint8_t matrice_f[NUM_BTN_COLUMNS][NUM_BTN_ROWS];
 
 void setup(void) {
+
+		char ch = 'a';
+		int i, j; 
 	
-		/* Daca butonul este apasat. */
-		//if ((PINC & (1 << PA2)) == 0)
-	/* Coloane Butoane */
+		/* Coloane Butoane */
 		DDRB |= (1<< PB4);  //iesire
 		PORTB |= (1<< PB4);
 		DDRB |= (1<< PB5);  
@@ -87,7 +91,7 @@ void setup(void) {
 		PORTB |= (1<< PB7); //aprins
 
 	
-	/* Linii Butoane */
+		/* Linii Butoane */
 		DDRB &= ~(1<< PB0);  //intrare
 		PORTB |= (1<< PB0);
 		DDRB &= ~(1<< PB1);  
@@ -97,7 +101,7 @@ void setup(void) {
 		DDRB &= ~(1<< PB3);  
 		PORTB |= (1<< PB3); //aprins
 
-	/* Linii LED-uri */
+		/* Linii LED-uri */
 		
 		 DDRA |= (1 << PA0); //iesire
 		 PORTA &= ~(1<< PA0);
@@ -111,8 +115,17 @@ void setup(void) {
 		 DDRA |= (1<< PA3);
 		 PORTA &= ~(1<< PA3);
 	 
-	 /* Coloane LED-uri*/
-		DDRA |= (1 << PA4); //iesire
+		 DDRC |= (1<< PC0);
+		 PORTC &= ~(1<< PC0);
+		
+		 DDRC |= (1<< PC1);
+		 PORTC &= ~(1<< PC1);
+		
+		 DDRC |= (1<< PC2);
+		 PORTC &= ~(1<< PC2);
+		
+		/* Coloane LED-uri*/
+		 DDRA |= (1 << PA4); //iesire
 		 PORTA |= (1<< PA4);
 		 
 		 DDRA |= (1<< PA5);
@@ -123,81 +136,156 @@ void setup(void) {
 		 
 		 DDRA |= (1<< PA7);
 		 PORTA |= (1<< PA7);
-	// Initialize the debounce counter array
-	
-	//prima etapa
-	PORTA |= (1 << PA0);//pronim linia
-	PORTA |= (1 << PA3);
 
-	PORTA &=~(1 << PA4);
-	PORTA &=~(1 << PA5);
-	PORTA &=~(1 << PA6);
-	PORTA &=~(1 << PA7);
-	
+		/* prima etapa */
+		PORTA |= (1 << PA0);//pronim linia
+		PORTA |= (1 << PA3);
 
-	 _delay_ms(1500);
+	for( i = 4; i< 8; i++){
+	
+		PORTA &=~(1 << i);
+		 _delay_ms(500);
+	} 
 	 
 	PORTA &=~(1 << PA0);
 	PORTA &=~(1 << PA3);
 	
-	PORTA |=(1 << PA4);
-	PORTA |=(1 << PA5);
-	PORTA |=(1 << PA6);
-	PORTA |=(1 << PA7);
+	for( i = 4; i< 8; i++){
+
+		PORTA |=(1 << i);
+		 _delay_ms(500);
+	} 
 	
-	
-		 _delay_ms(1500);
 		 
-	// a doua etapa
+	/* a doua etapa */
 	
 	PORTA |= (1 << PA1);//pronim linia
 	PORTA |= (1 << PA2);
 		 
-
 	PORTA &=~(1 << PA5);
 	PORTA &=~(1 << PA6);
 	
-	 _delay_ms(1500);
+	 _delay_ms(500);
 	
 	PORTA &=~(1 << PA1);
 	PORTA &=~(1 << PA2);
 	
-		
 	PORTA |=(1 << PA5);
 	PORTA |=(1 << PA6);
 	
-	  
-	 
+	 _delay_ms(500);
+		
+		
+	/* a treia etapa */
+	PORTA |= (1 << PA1);//pronim linia
+	PORTA |= (1 << PA2);
+		 
+
+	for( i = 5; i < 7 ; i++){
+	
+		PORTA &=~(1 << i);
+		//PORTC &=~(1 << PC2);
+		 _delay_ms(500);
+
+	}
+	
+	PORTA &=~(1 << PA1);
+	PORTA &=~(1 << PA2);
+	
+	for( i = 5; i < 7  ; i++){
+	
+		PORTA |=(1 << i);
+		//PORTC |=(1 << PC2);
+		 _delay_ms(500);
+	
+	}
+	
+
+	/* a patra  etapa */
+	
+	PORTA |= (1 << PA1);//pronim linia	 
+	//PORTA &=~(1 << PA5);
+	PORTC &=~(1 << PC1);
+		
+	_delay_ms(500);
+
+
+	
+	PORTA &=~(1 << PA1);
+//	PORTA |=(1 << PA5);
+	PORTC |=(1 << PC1);
+	_delay_ms(500);
+
+	
+	
+	PORTA |= (1 << PA2);
+		 
+	//PORTA &=~(1 << PA6);
+	PORTC &=~(1 << PC2);
+	
+	_delay_ms(500);
+	PORTA &=~(1 << PA2);
+	
+	//PORTA |=(1 << PA6);
+	PORTC |=(1 << PC2);
+	_delay_ms(800);
+	
+	
+	/* a cincea etapa  */
+	
+	PORTA |= (1 << PA2);
+	PORTA &=~(1 << PA5);
+		//PORTC &=~(1 << PC1);
+	_delay_ms(500);
+
+	PORTA &=~(1 << PA2);
+	PORTA |=(1 << PA5);
+		//PORTC |=(1 << PC1);
+	_delay_ms(500);
+	
+	
+	/* a sasea  etapa */
+	
+	PORTA |= (1 << PA1);//pronim linia	 
+	PORTA &=~(1 << PA6);
+		//PORTC &=~(1 << PC1);
+	_delay_ms(500);
+
+	
+	PORTA &=~(1 << PA1);
+	PORTA |=(1 << PA6);
+		//PORTC |=(1 << PC1);
+	_delay_ms(500);
+	
+	for( i = 0; i < NUM_BTN_ROWS; i++){
+		for( j = 0; j < NUM_BTN_COLUMNS; j++){
+				matrice[i][j] = ch;
+				ch++;
+		}
+	}
+
+	for( i = 0; i < NUM_BTN_ROWS; i++){
+		for( j = 0; j < NUM_BTN_COLUMNS; j++){
+				matrice_f[i][j] = 0;
+				
+		}
+	}  
+	
 }
 
 static uint8_t current = 0;
 
 static void scan()
-{    uint8_t val;
+{   
+	uint8_t val;
     uint8_t i, j;
 
-	//USART0_print(" in scan \n");
+	char vect_ch[2];
+	vect_ch[1]='\0';
+
 	PORTA &= ~(1<< ledcolumnpins[current]);
 	PORTB &= ~(1<< btncolumnpins[current]);
-/*
-	
-	if(LED_buffer[current][0]){
-	USART0_print(" * \n");
-		PORTA |= (1<< PA0);
-	}
-	if(LED_buffer[current][1]){
-		PORTA |= (1<< PA1);
-			USART0_print(" ** \n");
-	}
-	if(LED_buffer[current][2]){
-		PORTA |= (1<< PA2);
-			USART0_print(" *** \n");
-	}
-	if(LED_buffer[current][3]){
-		PORTA |= (1<< PA3);
-			USART0_print(" **** \n");
-	}
-*/
+
 
 // pause a moment
   _delay_ms(5);
@@ -207,82 +295,100 @@ static void scan()
 		if ((PINB & (1<<PB0))==0)
 		{
 			PORTA |= (1 << PA0);
-			//USART0_print(" A0\n");
+			PORTC |= (1 << PC0);
 			PORTA &=~(1 << ledcolumnpins[current]);
+			PORTC &=~(1 << ledcolumnpins[current]);
+			
+			vect_ch[0]= matrice[0][current];
+			if(matrice_f[0][current] == 0){
+				USART0_print(vect_ch);
+				matrice_f[0][current] = 1;
+			}
 		}
 		else{
-				// otherwise, button is released
-				//USART0_print("N0 ---?\n");
-			  
-					//PORTA &= ~(1<< PA0);
-				//	PORTA |= (1<<ledcolumnpins[current]);
+			if(matrice_f[0][current] == 1){
+				vect_ch[0]= matrice_s[0][current];
+				USART0_print(vect_ch);
+				matrice_f[0][current] = 0;
+			}
 		}
 
-		if ((PINB & (1<<PB1))==0)
+		if((PINB & (1<<PB1))==0)
 		{
-				//USART0_print(" A1****?\n");
-
 				PORTA |= (1 << PA1);
 				PORTA &=~(1 << ledcolumnpins[current]);
+				vect_ch[0]= matrice[1][current];
+				if(matrice_f[1][current] == 0){
+				USART0_print(vect_ch);
+				matrice_f[1][current] = 1;
+			}
 		}
 		else{
-				// otherwise, button is released
-				//USART0_print("N1 ---?\n");
-				//PORTA &= ~(1<< PA1);
-				//PORTA |= (1<<ledcolumnpins[current]);
+				if(matrice_f[1][current] == 1){
+				vect_ch[0]= matrice_s[1][current];
+				USART0_print(vect_ch);
+				matrice_f[1][current] = 0;
+			}
 		
 		}
 
 		//daca butonul e apasat
-		if ((PINB & (1<<PB2))==0)
+		if((PINB & (1<<PB2))==0)
 		{
-			//USART0_print(" A2\n");
-			
 			PORTA |= (1<< PA2);
 			PORTA &=~(1 << ledcolumnpins[current]);
+			vect_ch[0]= matrice[2][current];
+			if(matrice_f[2][current] == 0){
+				USART0_print(vect_ch);
+				matrice_f[2][current] = 1;
+			}
 
 		}
 		else{
-				// otherwise, button is released
-			//USART0_print("N2 ---?\n");
-			//PORTA &= ~(1<< PA2);
-			//PORTA |= (1<<ledcolumnpins[current]);
-
+			if(matrice_f[2][current] == 1){
+				vect_ch[0]= matrice_s[2][current];
+				USART0_print(vect_ch);
+					matrice_f[2][current] = 0;
+			}
 		}
 	
 
 		//daca butonul e apasat
-		if ((PINB & (1<<PB3))==0)
+		if((PINB & (1<<PB3))==0)
 		{
-			//USART0_print(" A3\n");
 			PORTA |= (1 << PA3);
 			PORTA &=~(1 << ledcolumnpins[current]);
+			vect_ch[0]= matrice[3][current];
+			if(matrice_f[3][current] == 0){
+				USART0_print(vect_ch);
+				matrice_f[3][current] = 1;
+			}
 		}
 		else{
-				// otherwise, button is released
-			//USART0_print("N3 ---?\n");
-			//PORTA &= ~(1<< PA3);
-			//PORTA |= (1<<ledcolumnpins[current]);
+	
+			if(matrice_f[3][current] == 1){
+				vect_ch[0]= matrice_s[3][current];
+				USART0_print(vect_ch);
+				matrice_f[3][current] = 0;
+			}
 		}
-			  
-			
-  
- 
   
 	_delay_ms(5); 
 
 	/*se aprinde o linie a butonului apasat si vrem sa se aprinda doar butonul curent*/
 	PORTB |= (1 << btncolumnpins[current]);
 	PORTA |= (1 << ledcolumnpins[current]);
+	PORTC |= (1 << ledcolumnpins[current]);
 
 	/* fara astea se aprind linii si raman aprinse mereu*/
 	PORTA &= ~(1<< PA0);
 	PORTA &= ~(1<< PA1);
 	PORTA &= ~(1<< PA2);
 	PORTA &= ~(1<< PA3);
+	PORTC &= ~(1<< PC0);
+	PORTC &= ~(1<< PC1);
+	PORTC &= ~(1<< PC2);
 	
-	
-		
 	current++;
 	if (current >= NUM_LED_COLUMNS )
 	{
@@ -293,66 +399,12 @@ static void scan()
 
 int main(void) {
 	
-	//USART0_init();
-	//USART0_print("Starting Setup... \n");
-
+	USART0_init();
 	setup();
-
-	//next_advance =  millis() + 1000;
-	//led_index = 0;
-	/*
-		DDRA &= ~(1<< PA0);
-	for(uint8_t i = 0; i < NUM_LED_COLUMNS; i++)
-	{
-		for(uint8_t j = 0; j < NUM_LED_ROWS; j++)
-		{
-		  LED_buffer[i][j] = 0;
-		}
-	}
-	*/
-/*	DDRA |= (15<< PA0);
-	PORTA |= (15 << PA0);
-	DDRA |= (1 << PA4);
-	PORTA |= (1 << PA4);
-	DDRB &= ~(1<<PB0);
-	PORTB |= (1<<PB0);
-	*/
-	//USART0_print(" Setup...Complete\n");
 
 	while (1){
 	
-	
-		scan();
-		 //if(millis() >= next_scan)
-		///  {
-		//	next_scan = millis()+1;
-		
-			//PORTA |=(1<<PA0);
-			/*USART0_print(" dupa scan \n");
-			 if( millis() >= next_advance)
-			  {
-				next_advance = millis()+1000;
-
-				LED_buffer[led_index/NUM_LED_COLUMNS][led_index%NUM_LED_COLUMNS] = false;
-				led_index++;
-				led_index %= (NUM_LED_COLUMNS * NUM_LED_ROWS);
-				LED_buffer[led_index/NUM_LED_COLUMNS][led_index%NUM_LED_COLUMNS] = true;
-			  }
-		
-			
-		 // }*/
-		 
-	/*	 if ((PINB & (1<<PB0))==0)
-		{
-			PORTA &= ~(1 << PA0);
-		//USART0_print(" A0\n");
-		}
-		else
-		{
-			PORTA |= (1<<PA0);
-		}
-		*/
-		 
+		scan(); 
 	}
 
 	return 0;
