@@ -1,13 +1,13 @@
 Mini LauchPad
 
 Proiect cu joc de lumini si sunete.
-Am butoane si led-uri RGB pe PCB-ul de 4x4:
+Am butoane si led-uri RGB pe PCB-ul de 4x4.
 PCB-ului conecteaza : 4 linii fiecare cu un switch-ul si 4 leduri (R,G,B) si 
-4 coloane fiecare avand ground-ul led-urilor si switch-urilor.
+4 coloane fiecare avand ground-ul led-urilor si al switch-urilor.
 
-Led-uri portA;
-Butoane portB;
-Led-uri combinatii de culoare port C;
+Led-uri sunt pe portA;
+Butoane sunt pe portB;
+Led-uri pentru combinatii de culoare sunt pe port C;
 
 Atat liniile cat si coloanele sunt conectate la pini astfel:
 liniile  de butoane sunt input,high
@@ -29,7 +29,8 @@ si transmisa pe seriala doar in momentul in care :
 Am gandit asa pentru a nu aglomera seriala.
 Am o matrice de flag-uri : matrice_f pentru a retine daca un buton a fost apasat sau nu.
 
-Pe seriala trimit concatenta caracterul cu '\n'.
+Pe seriala trimit caracterul concatenat cu '\n' in varch[]. Este important sa fie '\n', altfel uneori
+o ia razna.
 
 In sectiunea de etape fac jocul de lumini de la inceput, aprind leduri si am combinat si R G B 
 pentru a obtine alte culori. Pinii pentru a combina culorile sunt pe output stins pe porul C.
@@ -38,6 +39,8 @@ Pun pe high linia, pun pe high pinul de pe portul C cel care combina culoarea si
 Variabila curent se actualizeaza la fiecare apel de scan(), urmareste pe unde trece curentul si vede indicele portului la
 care ma aflu pe moment..
 Cand apas un buton aprind linia + pinul ce schimba culoarea si inchid (pun pe low) coloana data de ledcolumnpins[current].
+Pentru ca ledurile sa clipeasca cat timp sunt apasate conditiile de apasare si aprindere se fac in if, daca vrem sa stea aprins fara
+sa clipeasca atunci il putem pune in while.
 
 Programul din python primeste pe seriala characterele: litere (vectorul  normal )/nonalfanumerice (vectorul special) si face  pyautogui.keyDown(ch) pentru
 a apasa in interfata tastele mapate pe aceleasi litere, si daca nu e in vectorul 'normal' si e in 'special' atunci nu il mai apasa prin pyautogui.keyUp();
