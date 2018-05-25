@@ -39,7 +39,8 @@ Pun pe high linia, pun pe high pinul de pe portul C cel care combina culoarea si
 Variabila curent se actualizeaza la fiecare apel de scan(), urmareste pe unde trece curentul si vede indicele portului la
 care ma aflu pe moment..
 Cand apas un buton aprind linia + pinul ce schimba culoarea si inchid (pun pe low) coloana data de ledcolumnpins[current].
-Pentru ca ledurile sa clipeasca cat timp sunt apasate conditiile de apasare si aprindere se fac in if, daca vrem sa stea aprins fara
+Pentru ca ledurile sa clipeasca cat timp sunt apasate, conditiile de apasare si aprinderile se fac in if ,iar la finalul functie inchid linia si coloana pentru a scana 
+urmatoarea apasare. Daca vrem sa stea aprins fara da clipeasca se poate inlocui if-ul cu while insa nu se vor putea apasa concomitent 2 sau mai multe leduri in acest caz.
 sa clipeasca atunci il putem pune in while.
 
 Programul din python primeste pe seriala characterele: litere (vectorul  normal )/nonalfanumerice (vectorul special) si face  pyautogui.keyDown(ch) pentru
