@@ -66,291 +66,242 @@ static bool LED_buffer[NUM_LED_COLUMNS][NUM_LED_ROWS];
 static int32_t next_advance;
 static uint8_t led_index;
 
-static const uint8_t btncolumnpins[NUM_BTN_COLUMNS] = {PB0, PB1, PB2, PB3};
-static const uint8_t btnrowpins[NUM_BTN_ROWS]       = {PB4, PB5, PB6, PB7};
-static const uint8_t ledcolumnpins[NUM_LED_COLUMNS] = {PC0, PC1, PC2, PC3};
-static const uint8_t colorpins[NUM_LED_ROWS]        = {PC4, PC5, PC6, PC7};
+
+static const uint8_t btnrowpins[NUM_BTN_ROWS]       = {PB0, PB1, PB2, PB3};
+static const uint8_t btncolumnpins[NUM_BTN_COLUMNS] = {PB4, PB5, PB6, PB7};
+static const uint8_t colorpins[NUM_LED_ROWS]        = {PA0, PA1, PA2, PA3};
+static const uint8_t ledcolumnpins[NUM_LED_COLUMNS]  = {PA4, PA5, PA6, PA7};
 
 void setup(void) {
 	
 		/* Daca butonul este apasat. */
-		//if ((PINC & (1 << PC2)) == 0)
-	
-	
-	/* Coloane leduri */
-		//pinMode(btncolumnpins[i], OUTPUT);
-		 DDRB &= ~(1<< PC0);
-		//digitalWrite(btncolumnpins[i], HIGH); 
-		 PORTC |= (1<< PC0);
-		 
-		 DDRC &= ~(1<< PC1);
-		 PORTC |= (1<< PC1);
-		 
-		 DDRC &= ~(1<< PC2);
-		 PORTC |= (1<< PC2);
-		 
-		 DDRC &= ~(1<< PC3);
-		 PORTC |= (1<< PC3);
-		 
+		//if ((PINC & (1 << PA2)) == 0)
 	/* Coloane Butoane */
-		 DDRB &= ~(1<< PB0);
-		 PORTB |= (1<< PB0);
-		 
-		 DDRB &= ~(1<< PB1);
-		 PORTB |= (1<< PB1);
-		 
-		 DDRB &= ~(1<< PB2);
-		 PORTB |= (1<< PB2);
-		 
-		 DDRB &= ~(1<< PB3);
-		 PORTB |= (1<< PB3);
-	
-	/* Linii Butoane */
-		DDRB |= (1<< PB4);  
+		DDRB |= (1<< PB4);  //iesire
 		PORTB |= (1<< PB4);
 		DDRB |= (1<< PB5);  
 		PORTB |= (1<< PB5);
 		DDRB |= (1<< PB6);  
 		PORTB |= (1<< PB6);
 		DDRB |= (1<< PB7);  
-		PORTB |= (1<< PB7);
+		PORTB |= (1<< PB7); //aprins
+
+	
+	/* Linii Butoane */
+		DDRB &= ~(1<< PB0);  //intrare
+		PORTB |= (1<< PB0);
+		DDRB &= ~(1<< PB1);  
+		PORTB |= (1<< PB1);
+		DDRB &= ~(1<< PB2);  
+		PORTB |= (1<< PB2);
+		DDRB &= ~(1<< PB3);  
+		PORTB |= (1<< PB3); //aprins
 
 	/* Linii LED-uri */
-		 DDRC &= ~(1<< PC4);
-		//digitalWrite(btncolumnpins[i], HIGH);
-		 PORTC &= ~(1<< PC4);
+		
+		 DDRA |= (1 << PA0); //iesire
+		 PORTA &= ~(1<< PA0);
 		 
-		 DDRC &= ~(1<< PC5);
-		 PORTC &= ~(1<< PC5);
+		 DDRA |= (1<< PA1);
+		 PORTA &= ~(1<< PA1); //stins
 		 
-		 DDRC &= ~(1<< PC6);
-		 PORTC &= ~(1<< PC6);
+		 DDRA |= (1<< PA2);
+		 PORTA &= ~(1<< PA2);
 		 
-		 DDRC &= ~(1<< PC7);
-		PORTC &= ~(1<< PC7);
-	
+		 DDRA |= (1<< PA3);
+		 PORTA &= ~(1<< PA3);
+	 
+	 /* Coloane LED-uri*/
+		DDRA |= (1 << PA4); //iesire
+		 PORTA |= (1<< PA4);
+		 
+		 DDRA |= (1<< PA5);
+		 PORTA |= (1<< PA5); //aprins
+		
+		 DDRA |= (1<< PA6);
+		 PORTA |= (1<< PA6);
+		 
+		 DDRA |= (1<< PA7);
+		 PORTA |= (1<< PA7);
 	// Initialize the debounce counter array
-	for (uint8_t i = 0; i < NUM_BTN_COLUMNS; i++)
-	{
-		for (uint8_t j = 0; j < NUM_BTN_ROWS; j++)
-		{
-			debounce_count[i][j] = 0;
-		}
-	}
+	
+	//prima etapa
+	PORTA |= (1 << PA0);//pronim linia
+	PORTA |= (1 << PA3);
+
+	PORTA &=~(1 << PA4);
+	PORTA &=~(1 << PA5);
+	PORTA &=~(1 << PA6);
+	PORTA &=~(1 << PA7);
+	
+
+	 _delay_ms(1500);
+	 
+	PORTA &=~(1 << PA0);
+	PORTA &=~(1 << PA3);
+	
+	PORTA |=(1 << PA4);
+	PORTA |=(1 << PA5);
+	PORTA |=(1 << PA6);
+	PORTA |=(1 << PA7);
+	
+	
+		 _delay_ms(1500);
+		 
+	// a doua etapa
+	
+	PORTA |= (1 << PA1);//pronim linia
+	PORTA |= (1 << PA2);
+		 
+
+	PORTA &=~(1 << PA5);
+	PORTA &=~(1 << PA6);
+	
+	 _delay_ms(1500);
+	
+	PORTA &=~(1 << PA1);
+	PORTA &=~(1 << PA2);
+	
+		
+	PORTA |=(1 << PA5);
+	PORTA |=(1 << PA6);
+	
+	  
+	 
 }
 
+static uint8_t current = 0;
 
 static void scan()
-{
-	static uint8_t current = 0;
-    uint8_t val;
+{    uint8_t val;
     uint8_t i, j;
 
-	USART0_print(" in scan \n");
-	
-	
-	PORTB &= ~(1 << btncolumnpins[current]);
-	PORTC &= ~(1 << ledcolumnpins[current]);
+	//USART0_print(" in scan \n");
+	PORTA &= ~(1<< ledcolumnpins[current]);
+	PORTB &= ~(1<< btncolumnpins[current]);
+/*
 	
 	if(LED_buffer[current][0]){
 	USART0_print(" * \n");
-		PORTC |= (1<< PC4);
+		PORTA |= (1<< PA0);
 	}
 	if(LED_buffer[current][1]){
-		PORTC |= (1<< PC5);
+		PORTA |= (1<< PA1);
 			USART0_print(" ** \n");
 	}
 	if(LED_buffer[current][2]){
-		PORTC |= (1<< PC6);
+		PORTA |= (1<< PA2);
 			USART0_print(" *** \n");
 	}
 	if(LED_buffer[current][3]){
-		PORTC |= (1<< PC7);
+		PORTA |= (1<< PA3);
 			USART0_print(" **** \n");
 	}
-
+*/
 
 // pause a moment
   _delay_ms(5);
-  
-   // Read the button inputs
-		j = 0;
-  		USART0_print(" btn:PB4\n");
-		//daca butonul e apasat
-		if ((PINB & (1<<PB4))==0)
-		{
-		USART0_print(" E apasat PB4****?\n");
-		  if ( debounce_count[current][j] < MAX_DEBOUNCE)
-		  {
-				debounce_count[current][j]++;
-				if ( debounce_count[current][j] == MAX_DEBOUNCE )
-				{
-				  USART0_print("Key Up\n" );
-				  //USART0_print((char*)(current * NUM_BTN_ROWS) + j);
 
-				  // Do whatever you want to with the button press here:
-				  // toggle the current LED state
-				  //LED_buffer[current][j] = !LED_buffer[current][j];	
-				 LED_buffer[current][j] = !LED_buffer[current][j];
-				
-				
-				}
-			}
+ 
+		//daca butonul e apasat
+		if ((PINB & (1<<PB0))==0)
+		{
+			PORTA |= (1 << PA0);
+			//USART0_print(" A0\n");
+			PORTA &=~(1 << ledcolumnpins[current]);
 		}
 		else{
 				// otherwise, button is released
-				USART0_print("NU E apasat PB4 ---?\n");
-			  if ( debounce_count[current][j] > 0)
-			  {
-				debounce_count[current][j]--;
-				if ( debounce_count[current][j] == 0 )
-				{
-					USART0_print("Key not pressed Up \n");
-				  // If you want to do something when a key is released, do it here:
+				//USART0_print("N0 ---?\n");
+			  
+					//PORTA &= ~(1<< PA0);
+				//	PORTA |= (1<<ledcolumnpins[current]);
+		}
 
-				}
-			  }
-			}
-		j = 1;
-		USART0_print(" btn:PB5\n");
-		//daca butonul e apasat
-		if ((PINB & (1<<PB5))==0)
+		if ((PINB & (1<<PB1))==0)
 		{
-		USART0_print(" E apasat PB5****?\n");
-		  if ( debounce_count[current][j] < MAX_DEBOUNCE)
-		  {
-				debounce_count[current][j]++;
-				if ( debounce_count[current][j] == MAX_DEBOUNCE )
-				{
-				  USART0_print("Key Up\n" );
-				  //USART0_print((char*)(current * NUM_BTN_ROWS) + j);
+				//USART0_print(" A1****?\n");
 
-				  // Do whatever you want to with the button press here:
-				  // toggle the current LED state
-				  //LED_buffer[current][j] = !LED_buffer[current][j];	
-				   LED_buffer[current][j] = !LED_buffer[current][j];
-				}
-			}
+				PORTA |= (1 << PA1);
+				PORTA &=~(1 << ledcolumnpins[current]);
 		}
 		else{
 				// otherwise, button is released
-				USART0_print("NU E apasat PB5 ---?\n");
-			  if ( debounce_count[current][j] > 0)
-			  {
-				debounce_count[current][j]--;
-				if ( debounce_count[current][j] == 0 )
-				{
-					USART0_print("Key not pressed Up \n");
-				  // If you want to do something when a key is released, do it here:
+				//USART0_print("N1 ---?\n");
+				//PORTA &= ~(1<< PA1);
+				//PORTA |= (1<<ledcolumnpins[current]);
+		
+		}
 
-				}
-			  }
-			}
-			j = 2;
-		USART0_print(" btn:PB6\n");
 		//daca butonul e apasat
-		if ((PINB & (1<<PB6))==0)
+		if ((PINB & (1<<PB2))==0)
 		{
-		USART0_print(" E apasat PB6****?\n");
-		  if ( debounce_count[current][j] < MAX_DEBOUNCE)
-		  {
-				debounce_count[current][j]++;
-				if ( debounce_count[current][j] == MAX_DEBOUNCE )
-				{
-				  USART0_print("Key Up\n" );
-				  //USART0_print((char*)(current * NUM_BTN_ROWS) + j);
+			//USART0_print(" A2\n");
+			
+			PORTA |= (1<< PA2);
+			PORTA &=~(1 << ledcolumnpins[current]);
 
-				  // Do whatever you want to with the button press here:
-				  // toggle the current LED state
-				  //LED_buffer[current][j] = !LED_buffer[current][j];
-					LED_buffer[current][j] = !LED_buffer[current][j];	
-				}
-			}
 		}
 		else{
 				// otherwise, button is released
-				USART0_print("NU E apasat PB6 ---?\n");
-			  if ( debounce_count[current][j] > 0)
-			  {
-				debounce_count[current][j]--;
-				if ( debounce_count[current][j] == 0 )
-				{
-					USART0_print("Key not pressed Up \n");
-				  // If you want to do something when a key is released, do it here:
+			//USART0_print("N2 ---?\n");
+			//PORTA &= ~(1<< PA2);
+			//PORTA |= (1<<ledcolumnpins[current]);
 
-				}
-			  }
-			}
-			j = 3;
-		USART0_print(" btn:PB7\n");
+		}
+	
+
 		//daca butonul e apasat
-		if ((PINB & (1<<PB7))==0)
+		if ((PINB & (1<<PB3))==0)
 		{
-		USART0_print(" E apasat PB7**9uf9?\n");
-		  if ( debounce_count[current][j] < MAX_DEBOUNCE)
-		  {
-				debounce_count[current][j]++;
-				if ( debounce_count[current][j] == MAX_DEBOUNCE )
-				{
-				  USART0_print("Key Up\n" );
-				  //USART0_print((char*)(current * NUM_BTN_ROWS) + j);
-
-				  // Do whatever you want to with the button press here:
-				  // toggle the current LED state
-				  //LED_buffer[current][j] = !LED_buffer[current][j];	
-				   LED_buffer[current][j] = !LED_buffer[current][j];
-				}
-			}
+			//USART0_print(" A3\n");
+			PORTA |= (1 << PA3);
+			PORTA &=~(1 << ledcolumnpins[current]);
 		}
 		else{
 				// otherwise, button is released
-				USART0_print("NU E apasat PB7 ---?\n");
-			  if ( debounce_count[current][j] > 0)
-			  {
-				debounce_count[current][j]--;
-				if ( debounce_count[current][j] == 0 )
-				{
-					USART0_print("Key not pressed Up \n");
-				  // If you want to do something when a key is released, do it here:
-
-				}
-			  }
-			}
+			//USART0_print("N3 ---?\n");
+			//PORTA &= ~(1<< PA3);
+			//PORTA |= (1<<ledcolumnpins[current]);
+		}
+			  
+			
   
  
   
 	_delay_ms(5); 
-	PORTB |= (1<< btncolumnpins[current]);
-	PORTC |= (1<< ledcolumnpins[current]);
 
+	/*se aprinde o linie a butonului apasat si vrem sa se aprinda doar butonul curent*/
+	PORTB |= (1 << btncolumnpins[current]);
+	PORTA |= (1 << ledcolumnpins[current]);
+
+	/* fara astea se aprind linii si raman aprinse mereu*/
+	PORTA &= ~(1<< PA0);
+	PORTA &= ~(1<< PA1);
+	PORTA &= ~(1<< PA2);
+	PORTA &= ~(1<< PA3);
 	
 	
-		//digitalWrite(btncolumnpins[i], HIGH);
-	PORTC &= ~(1<< PC4);
-	PORTC &= ~(1<< PC5);
-	PORTC &= ~(1<< PC6);
-	PORTC &= ~(1<< PC7);
 		
 	current++;
-	if (current >= NUM_LED_COLUMNS)
+	if (current >= NUM_LED_COLUMNS )
 	{
 		current = 0;
 	}
-
 
 }
 
 int main(void) {
 	
-	USART0_init();
-	USART0_print("Starting Setup... \n");
+	//USART0_init();
+	//USART0_print("Starting Setup... \n");
 
 	setup();
 
-	next_advance =  millis() + 1000;
-	led_index = 0;
-	
-	
+	//next_advance =  millis() + 1000;
+	//led_index = 0;
+	/*
+		DDRA &= ~(1<< PA0);
 	for(uint8_t i = 0; i < NUM_LED_COLUMNS; i++)
 	{
 		for(uint8_t j = 0; j < NUM_LED_ROWS; j++)
@@ -358,15 +309,25 @@ int main(void) {
 		  LED_buffer[i][j] = 0;
 		}
 	}
-
-	USART0_print(" Setup...Complete\n");
+	*/
+/*	DDRA |= (15<< PA0);
+	PORTA |= (15 << PA0);
+	DDRA |= (1 << PA4);
+	PORTA |= (1 << PA4);
+	DDRB &= ~(1<<PB0);
+	PORTB |= (1<<PB0);
+	*/
+	//USART0_print(" Setup...Complete\n");
 
 	while (1){
+	
+	
+		scan();
 		 //if(millis() >= next_scan)
 		///  {
 		//	next_scan = millis()+1;
 		
-			scan();
+			//PORTA |=(1<<PA0);
 			/*USART0_print(" dupa scan \n");
 			 if( millis() >= next_advance)
 			  {
@@ -377,9 +338,21 @@ int main(void) {
 				led_index %= (NUM_LED_COLUMNS * NUM_LED_ROWS);
 				LED_buffer[led_index/NUM_LED_COLUMNS][led_index%NUM_LED_COLUMNS] = true;
 			  }
-			
+		
 			
 		 // }*/
+		 
+	/*	 if ((PINB & (1<<PB0))==0)
+		{
+			PORTA &= ~(1 << PA0);
+		//USART0_print(" A0\n");
+		}
+		else
+		{
+			PORTA |= (1<<PA0);
+		}
+		*/
+		 
 	}
 
 	return 0;
