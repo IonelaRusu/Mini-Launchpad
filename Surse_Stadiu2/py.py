@@ -21,7 +21,7 @@ while True:
             charlist.add(ascii[i])
         while len(charlist) != 0:
             ch = charlist.pop()
-            if special.count(ch) == 0:
+            if normal.count(ch) != 0:
                 pyautogui.keyDown(ch)
             else:
                 indexinlist = special.index(ch) if ch in special else -1

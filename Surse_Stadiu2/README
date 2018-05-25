@@ -1,0 +1,47 @@
+Mini LauchPad
+
+Proiect cu joc de lumini si sunete.
+Am butoane si led-uri RGB pe PCB-ul de 4x4:
+PCB-ului conecteaza : 4 linii fiecare cu un switch-ul si 4 leduri (R,G,B) si 
+4 coloane fiecare avand ground-ul led-urilor si switch-urilor.
+
+Led-uri portA;
+Butoane portB;
+Led-uri combinatii de culoare port C;
+
+Atat liniile cat si coloanele sunt conectate la pini astfel:
+liniile  de butoane sunt input,high
+liniile de led-uri sunt output, low
+coloane de butoane sunt outuput high
+coloanele de led-uri sunt output high
+
+Exemplu din cod mapare pe pini:
+static const uint8_t btnrowpins[NUM_BTN_ROWS]       = {PB0, PB1, PB2, PB3};
+static const uint8_t btncolumnpins[NUM_BTN_COLUMNS] = {PB4, PB5, PB6, PB7};
+static const uint8_t colorpins[NUM_LED_ROWS]        = {PA0, PA1, PA2, PA3};
+static const uint8_t ledcolumnpins[NUM_LED_COLUMNS]  = {PA4, PA5, PA6, PA7};
+
+Am mapat fiecare apasare buton (intersectie dintre linie si coloana) cu  o litera (a,b,c...p),
+iar fiecare "neapasare" de buton cu un caracter ('%','@','~'...'>'). Aceasta mapare este folosita 
+si transmisa pe seriala doar in momentul in care :
+-literele se trimit cand butonul e apasat dar nu a mai fost
+-caracterele se trimit cand butonul nu e mai apasat dar anterior a fost apasat
+Am gandit asa pentru a nu aglomera seriala.
+Am o matrice de flag-uri : matrice_f pentru a retine daca un buton a fost apasat sau nu.
+
+Pe seriala trimit concatenta caracterul cu '\n'.
+
+In sectiunea de etape fac jocul de lumini de la inceput, aprind leduri si am combinat si R G B 
+pentru a obtine alte culori. Pinii pentru a combina culorile sunt pe output stins pe porul C.
+Pun pe high linia, pun pe high pinul de pe portul C cel care combina culoarea si pun pe low coloana.
+
+Variabila curent se actualizeaza la fiecare apel de scan(), urmareste pe unde trece curentul si vede indicele portului la
+care ma aflu pe moment..
+Cand apas un buton aprind linia + pinul ce schimba culoarea si inchid (pun pe low) coloana data de ledcolumnpins[current].
+
+Programul din python primeste pe seriala characterele: litere (vectorul  normal )/nonalfanumerice (vectorul special) si face  pyautogui.keyDown(ch) pentru
+a apasa in interfata tastele mapate pe aceleasi litere, si daca nu e in vectorul 'normal' si e in 'special' atunci nu il mai apasa prin pyautogui.keyUp();
+
+Programul folosit este: BEATPAD , unde am facut setari pentru a mapa sunetele(primele 16 beat-uri pe literele a.....p).
+
+
