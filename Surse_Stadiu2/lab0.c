@@ -142,7 +142,7 @@ void setup(void) {
 		PORTA |= (1 << PA3);
 
 	for( i = 4; i< 8; i++){
-	
+
 		PORTA &=~(1 << i);
 		 _delay_ms(500);
 	} 
@@ -204,43 +204,39 @@ void setup(void) {
 	/* a patra  etapa */
 	
 	PORTA |= (1 << PA1);//pronim linia	 
-	//PORTA &=~(1 << PA5);
-	PORTC &=~(1 << PC1);
+	PORTA &=~(1 << PA5);
+	PORTC |=(1 << PC2);
 		
 	_delay_ms(500);
 
-
-	
 	PORTA &=~(1 << PA1);
-//	PORTA |=(1 << PA5);
-	PORTC |=(1 << PC1);
+	PORTA |=(1 << PA5);
+	PORTC &=~(1 << PC2);
 	_delay_ms(500);
 
 	
 	
 	PORTA |= (1 << PA2);
-		 
-	//PORTA &=~(1 << PA6);
-	PORTC &=~(1 << PC2);
+	PORTA &=~(1 << PA6);
+	PORTC |=(1 << PC1);
 	
 	_delay_ms(500);
 	PORTA &=~(1 << PA2);
-	
-	//PORTA |=(1 << PA6);
-	PORTC |=(1 << PC2);
-	_delay_ms(800);
+	PORTA |=(1 << PA6);
+	PORTC &=~(1 << PC1);
+	_delay_ms(1000);
 	
 	
 	/* a cincea etapa  */
 	
 	PORTA |= (1 << PA2);
 	PORTA &=~(1 << PA5);
-		//PORTC &=~(1 << PC1);
+	PORTC |=(1 << PC1);
 	_delay_ms(500);
 
 	PORTA &=~(1 << PA2);
 	PORTA |=(1 << PA5);
-		//PORTC |=(1 << PC1);
+	PORTC &=~(1 << PC1);
 	_delay_ms(500);
 	
 	
@@ -248,15 +244,17 @@ void setup(void) {
 	
 	PORTA |= (1 << PA1);//pronim linia	 
 	PORTA &=~(1 << PA6);
-		//PORTC &=~(1 << PC1);
+	PORTC |=(1 << PC2);//deschid
 	_delay_ms(500);
 
 	
 	PORTA &=~(1 << PA1);
 	PORTA |=(1 << PA6);
-		//PORTC |=(1 << PC1);
+	PORTC &=~(1 << PC2); //inchid
 	_delay_ms(500);
-	
+		
+		
+		
 	for( i = 0; i < NUM_BTN_ROWS; i++){
 		for( j = 0; j < NUM_BTN_COLUMNS; j++){
 				matrice[i][j] = ch;
