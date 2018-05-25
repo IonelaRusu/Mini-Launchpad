@@ -1,6 +1,6 @@
 /*
- * PM - 2017
- * lab0.c
+ * PM - 2018
+ * Ionela Rusu 332CB
  */
 
 #include <avr/io.h>
@@ -159,7 +159,7 @@ void setup(void) {
 		 
 	/* a doua etapa */
 	
-	PORTA |= (1 << PA1);//pornim linia
+	PORTA |= (1 << PA1);//pronim linia
 	PORTA |= (1 << PA2);
 		 
 	PORTA &=~(1 << PA5);
@@ -394,7 +394,7 @@ static void scan()
 	}
 
 }
-j
+
 int main(void) {
 	
 	USART0_init();
